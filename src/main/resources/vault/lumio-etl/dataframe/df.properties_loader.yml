@@ -1,0 +1,8 @@
+services:
+    df.properties_loader:
+        class: "com.lumiomedical.etl.dataframe.configuration.loader.file.TablePropertiesFlexibleLoader"
+        constructor:
+            - "@df.properties_loader.json"
+
+    df.properties_loader.json:
+        class: "com.lumiomedical.etl.dataframe.configuration.loader.json.TablePropertiesJSONLoader"
