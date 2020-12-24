@@ -6,7 +6,7 @@ import com.lumiomedical.etl.dataframe.processor.print.PrintStructureProcessor;
 import com.lumiomedical.etl.dataframe.processor.print.PrintTableProcessor;
 import com.lumiomedical.etl.logging.Logging;
 import com.lumiomedical.etl.transformer.tablesaw.TablesawProcessorTransformer;
-import com.lumiomedical.flow.etl.transformer.Transformer;
+import com.lumiomedical.flow.actor.transformer.Transformer;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;

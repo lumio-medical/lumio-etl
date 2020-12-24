@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>Lumio ETL</name>
-    <description>TODO</description>
+    <description>This library provides utilities for building lumio-flow based ETLs</description>
     <url>https://github.com/lumio-medical/lumio-etl</url>
 
     <organization>
@@ -35,7 +35,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>13</maven.compiler.release>
+        <maven.compiler.release>11</maven.compiler.release>
         <slf4j.version>1.7.30</slf4j.version>
         <tablesaw.version>0.38.1</tablesaw.version>
     </properties>
@@ -44,7 +44,13 @@
         <dependency>
             <groupId>com.lumiomedical</groupId>
             <artifactId>lumio-flow</artifactId>
-            <version>[0.7.1,)</version>
+            <version>[0.11,)</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lumiomedical</groupId>
+            <artifactId>lumio-vault</artifactId>
+            <version>[0.9,)</version>
         </dependency>
 
         <dependency>
@@ -57,6 +63,18 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
             <version>1.11.721</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.20</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.13.1</version>
         </dependency>
 
         <dependency>

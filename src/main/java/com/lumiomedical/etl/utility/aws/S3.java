@@ -9,8 +9,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
-import com.lumiomedical.etl.utility.env.Environment;
-import com.lumiomedical.etl.utility.env.EnvironmentLoadingException;
 import com.noleme.commons.file.Files;
 import com.noleme.commons.stream.Streams;
 
@@ -18,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -83,17 +80,18 @@ public final class S3
     }
 
     /**
-     * Build an S3 AWS Client from environment variables
      *
-     * @param accessKeyVariable Access key environment variable name
-     * @param secretKeyVariable Secret key environment variable name
-     * @param regionVariable
+     * @param accessKey
+     * @param secretKey
+     * @param region
      * @return
-     * @throws EnvironmentLoadingException
      */
-    public static AmazonS3 buildS3FromEnv(String accessKeyVariable, String secretKeyVariable, String regionVariable) throws EnvironmentLoadingException
+    public static AmazonS3 buildS3(String accessKey, String secretKey, String region)
     {
-        Properties properties = Environment.loadProperties(Map.of(accessKeyVariable, "access_key", secretKeyVariable, "secret_key", regionVariable, "region"));
+        var properties = new Properties();
+        properties.setProperty("access_key", accessKey);
+        properties.setProperty("secret_key", secretKey);
+        properties.setProperty("region", region);
 
         return buildS3(properties);
     }

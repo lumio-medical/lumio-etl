@@ -1,6 +1,6 @@
 package com.lumiomedical.etl.transformer.iostream;
 
-import com.lumiomedical.flow.etl.transformer.Transformer;
+import com.lumiomedical.flow.actor.transformer.Transformer;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

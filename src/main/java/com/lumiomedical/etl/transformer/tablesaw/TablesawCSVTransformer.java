@@ -1,18 +1,18 @@
 package com.lumiomedical.etl.transformer.tablesaw;
 
+import com.lumiomedical.etl.dataframe.configuration.ColumnProperties;
+import com.lumiomedical.etl.dataframe.configuration.TableProperties;
+import com.lumiomedical.etl.dataframe.configuration.loader.TablePropertiesLoadingException;
+import com.lumiomedical.etl.dataframe.configuration.loader.file.TablePropertiesFileLoader;
+import com.lumiomedical.etl.dataframe.configuration.loader.iostream.TablePropertiesJSONStreamLoader;
 import com.lumiomedical.etl.dataframe.processor.CompositeProcessor;
 import com.lumiomedical.etl.dataframe.processor.TableProcessor;
 import com.lumiomedical.etl.dataframe.processor.TableProcessorException;
 import com.lumiomedical.etl.dataframe.processor.column.AddColumnRowIndexPropertiesProcessor;
 import com.lumiomedical.etl.dataframe.processor.column.RenameColumnPropertiesProcessor;
 import com.lumiomedical.etl.logging.Logging;
-import com.lumiomedical.etl.dataframe.configuration.ColumnProperties;
-import com.lumiomedical.etl.dataframe.configuration.TableProperties;
-import com.lumiomedical.etl.dataframe.configuration.loader.TablePropertiesLoadingException;
-import com.lumiomedical.etl.dataframe.configuration.loader.file.TablePropertiesFileLoader;
-import com.lumiomedical.etl.dataframe.configuration.loader.json.TablePropertiesJSONLoader;
-import com.lumiomedical.flow.etl.transformer.TransformationException;
-import com.lumiomedical.flow.etl.transformer.Transformer;
+import com.lumiomedical.flow.actor.transformer.TransformationException;
+import com.lumiomedical.flow.actor.transformer.Transformer;
 import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.io.Source;
@@ -34,6 +34,11 @@ public class TablesawCSVTransformer implements Transformer<InputStream, Table>
     private final TableProperties properties;
     private final TableProcessor preprocessor;
 
+    public TablesawCSVTransformer()
+    {
+        this(new TableProperties());
+    }
+
     /**
      *
      * @param properties
@@ -53,7 +58,7 @@ public class TablesawCSVTransformer implements Transformer<InputStream, Table>
      */
     public TablesawCSVTransformer(String confPath) throws TablePropertiesLoadingException
     {
-        this(new TablePropertiesFileLoader(new TablePropertiesJSONLoader()).load(confPath));
+        this(new TablePropertiesFileLoader(new TablePropertiesJSONStreamLoader()).load(confPath));
     }
 
     @Override

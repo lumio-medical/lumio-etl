@@ -3,8 +3,8 @@ package com.lumiomedical.etl.transformer.tablesaw;
 import com.lumiomedical.etl.dataframe.processor.CompositeProcessor;
 import com.lumiomedical.etl.dataframe.processor.TableProcessor;
 import com.lumiomedical.etl.dataframe.processor.TableProcessorException;
-import com.lumiomedical.flow.etl.transformer.TransformationException;
-import com.lumiomedical.flow.etl.transformer.Transformer;
+import com.lumiomedical.flow.actor.transformer.TransformationException;
+import com.lumiomedical.flow.actor.transformer.Transformer;
 import tech.tablesaw.api.Table;
 
 /**

@@ -1,7 +1,7 @@
 package com.lumiomedical.etl.transformer.tablesaw;
 
 import com.lumiomedical.etl.dataframe.processor.print.PrintTableProcessor;
-import com.lumiomedical.flow.etl.transformer.Transformer;
+import com.lumiomedical.flow.actor.transformer.Transformer;
 import tech.tablesaw.api.Table;
 
 /**

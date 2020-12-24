@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.lumiomedical</groupId>
+    <artifactId>sample-nlp</artifactId>
+    <version>0.1</version>
+    <packaging>jar</packaging>
+
+    <name>Lumio ETL Sample - NLP</name>
+    <description>This is a sample project showcasing parts of the lumio-etl library</description>
+
+    <organization>
+        <name>Lumio Medical</name>
+        <url>https://lumiomedical.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Pierre Lecerf</name>
+            <email>plecerf@lumiomedical.com</email>
+            <organization>Lumio Medical</organization>
+            <organizationUrl>https://lumiomedical.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>11</maven.compiler.release>
+        <slf4j.version>1.7.30</slf4j.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.lumiomedical</groupId>
+            <artifactId>lumio-etl</artifactId>
+            <version>[0.1,)</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+    </dependencies>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://github.com/lumio-medical/lumio-etl/blob/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+</project>

@@ -1,8 +1,8 @@
 package com.lumiomedical.etl.extractor.ftp;
 
 import com.lumiomedical.etl.logging.Logging;
-import com.lumiomedical.flow.etl.extractor.ExtractionException;
-import com.lumiomedical.flow.etl.extractor.Extractor;
+import com.lumiomedical.flow.actor.extractor.ExtractionException;
+import com.lumiomedical.flow.actor.extractor.Extractor;
 
 import java.io.IOException;
 import java.io.InputStream;

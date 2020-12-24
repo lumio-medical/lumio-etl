@@ -1,8 +1,8 @@
 package com.lumiomedical.etl.loader.zip;
 
 import com.lumiomedical.etl.logging.Logging;
-import com.lumiomedical.flow.etl.loader.Loader;
-import com.lumiomedical.flow.etl.loader.LoadingException;
+import com.lumiomedical.flow.actor.loader.Loader;
+import com.lumiomedical.flow.actor.loader.LoadingException;
 import com.noleme.commons.stream.Streams;
 import com.noleme.commons.stream.Streams.Policy;
 

@@ -5,4 +5,4 @@ services:
             - "@df.properties_loader.json"
 
     df.properties_loader.json:
-        class: "com.lumiomedical.etl.dataframe.configuration.loader.json.TablePropertiesJSONLoader"
+        class: "com.lumiomedical.etl.dataframe.configuration.loader.iostream.TablePropertiesJSONStreamLoader"

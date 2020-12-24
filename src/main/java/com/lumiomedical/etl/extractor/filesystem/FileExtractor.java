@@ -1,8 +1,8 @@
 package com.lumiomedical.etl.extractor.filesystem;
 
 import com.lumiomedical.etl.logging.Logging;
-import com.lumiomedical.flow.etl.extractor.ExtractionException;
-import com.lumiomedical.flow.etl.extractor.Extractor;
+import com.lumiomedical.flow.actor.extractor.ExtractionException;
+import com.lumiomedical.flow.actor.extractor.Extractor;
 import com.noleme.commons.file.Files;
 
 import java.io.FileNotFoundException;
@@ -12,7 +12,7 @@ import java.io.InputStream;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/02/27
  */
-public class FilesystemExtractor implements Extractor<InputStream>
+public class FileExtractor implements Extractor<InputStream>
 {
     private final String path;
 
@@ -20,7 +20,7 @@ public class FilesystemExtractor implements Extractor<InputStream>
      *
      * @param path
      */
-    public FilesystemExtractor(String path)
+    public FileExtractor(String path)
     {
         this.path = path;
     }

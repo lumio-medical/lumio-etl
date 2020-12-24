@@ -3,7 +3,7 @@ package com.lumiomedical.etl.extractor.aws;
 import com.amazonaws.services.s3.AmazonS3;
 import com.lumiomedical.etl.logging.Logging;
 import com.lumiomedical.etl.utility.aws.S3;
-import com.lumiomedical.flow.etl.extractor.Extractor;
+import com.lumiomedical.flow.actor.extractor.Extractor;
 
 import java.io.InputStream;
 

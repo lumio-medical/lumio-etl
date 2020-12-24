@@ -2,8 +2,8 @@ package com.lumiomedical.etl.transformer.json;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lumiomedical.etl.logging.Logging;
-import com.lumiomedical.flow.etl.transformer.TransformationException;
-import com.lumiomedical.flow.etl.transformer.Transformer;
+import com.lumiomedical.flow.actor.transformer.TransformationException;
+import com.lumiomedical.flow.actor.transformer.Transformer;
 import com.noleme.json.Json;
 import com.noleme.json.JsonException;
 

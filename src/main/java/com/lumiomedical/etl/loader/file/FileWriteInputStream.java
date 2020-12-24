@@ -1,8 +1,8 @@
 package com.lumiomedical.etl.loader.file;
 
 import com.lumiomedical.etl.logging.Logging;
-import com.lumiomedical.flow.etl.loader.Loader;
-import com.lumiomedical.flow.etl.loader.LoadingException;
+import com.lumiomedical.flow.actor.loader.Loader;
+import com.lumiomedical.flow.actor.loader.LoadingException;
 import com.noleme.commons.stream.Streams;
 
 import java.io.FileOutputStream;
@@ -13,7 +13,7 @@ import java.io.InputStream;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/04/01
  */
-public class FileWriteLoader<I extends InputStream> implements Loader<I>
+public class FileWriteInputStream<I extends InputStream> implements Loader<I>
 {
     private final String outputFile;
     private final boolean append;
@@ -22,7 +22,7 @@ public class FileWriteLoader<I extends InputStream> implements Loader<I>
      *
      * @param outputFile
      */
-    public FileWriteLoader(String outputFile)
+    public FileWriteInputStream(String outputFile)
     {
         this(outputFile, false);
     }
@@ -32,7 +32,7 @@ public class FileWriteLoader<I extends InputStream> implements Loader<I>
      * @param outputFile
      * @param append
      */
-    public FileWriteLoader(String outputFile, boolean append)
+    public FileWriteInputStream(String outputFile, boolean append)
     {
         this.outputFile = outputFile;
         this.append = append;

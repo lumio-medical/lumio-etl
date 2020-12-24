@@ -1,8 +1,8 @@
 package com.lumiomedical.etl.loader.tablesaw;
 
 import com.lumiomedical.etl.logging.Logging;
-import com.lumiomedical.flow.etl.loader.Loader;
-import com.lumiomedical.flow.etl.loader.LoadingException;
+import com.lumiomedical.flow.actor.loader.Loader;
+import com.lumiomedical.flow.actor.loader.LoadingException;
 import tech.tablesaw.api.Table;
 
 import java.io.FileWriter;

@@ -7,10 +7,8 @@ import com.lumiomedical.etl.dataframe.configuration.ColumnProperties;
 import com.lumiomedical.etl.dataframe.configuration.TableProperties;
 import com.lumiomedical.etl.dataframe.configuration.loader.TablePropertiesLoader;
 import com.lumiomedical.etl.dataframe.configuration.loader.TablePropertiesLoadingException;
-import com.noleme.json.Json;
 import tech.tablesaw.api.ColumnType;
 
-import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,18 +20,16 @@ import static com.noleme.commons.function.RethrowPredicate.rethrower;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/03/01
  */
-public class TablePropertiesJSONLoader implements TablePropertiesLoader<InputStream>
+public class TablePropertiesNodeLoader implements TablePropertiesLoader<ObjectNode>
 {
     @Override
-    public TableProperties load(InputStream stream) throws TablePropertiesLoadingException
+    public TableProperties load(ObjectNode json) throws TablePropertiesLoadingException
     {
-        ObjectNode json = (ObjectNode) Json.parse(stream);
-
-        checkRequired(json, "column_count", "mapping");
+        checkRequired(json, "column_count", "columns");
 
         var properties = new TableProperties()
             .setColumnCount(json.get("column_count").asInt())
-            .setMapping(this.computeMapping(json.get("mapping")));
+            .setMapping(this.computeMapping(json.get("columns")));
 
         if (json.has("name"))
             properties.setName(json.get("name").asText());
