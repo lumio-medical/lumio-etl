@@ -4,7 +4,7 @@
     "has_header": true,
     "column_count": 4,
     "charset": "utf-8",
-    "mapping": [
+    "columns": [
         {
             "index": 0,
             "type": "LONG",
