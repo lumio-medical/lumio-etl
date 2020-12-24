@@ -1,7 +1,7 @@
 # Lumio ETL
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/lumio-medical/lumio-etl/Java%20CI%20with%20Maven)](https://github.com/lumio-medical/lumio-record/actions?query=workflow%3A%22Java+CI+with+Maven%22)
-[![Maven Central Repository](https://maven-badges.herokuapp.com/maven-central/com.lumiomedical/lumio-etl/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.lumiomedical/lumio-record)
+[![Maven Central Repository](https://maven-badges.herokuapp.com/maven-central/com.lumiomedical/lumio-etl/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.lumiomedical/lumio-etl)
 [![javadoc](https://javadoc.io/badge2/com.lumiomedical/lumio-etl/javadoc.svg)](https://javadoc.io/doc/com.lumiomedical/lumio-etl)
 ![GitHub](https://img.shields.io/github/license/lumio-medical/lumio-etl)
 
