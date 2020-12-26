@@ -11,28 +11,28 @@ import java.util.regex.Pattern;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/12/17
  */
-public class RegexReplace implements Transformer<String, String>
+public class RegexReplacer implements Transformer<String, String>
 {
     private final Pattern pattern;
     private final Function<MatchResult, String> replacement;
 
-    public RegexReplace(Pattern pattern, Function<MatchResult, String> replacement)
+    public RegexReplacer(Pattern pattern, Function<MatchResult, String> replacement)
     {
         this.pattern = pattern;
         this.replacement = replacement;
     }
 
-    public RegexReplace(Pattern pattern, String replacement)
+    public RegexReplacer(Pattern pattern, String replacement)
     {
         this(pattern, mr -> replacement);
     }
 
-    public RegexReplace(String regex, Function<MatchResult, String> replacement)
+    public RegexReplacer(String regex, Function<MatchResult, String> replacement)
     {
         this(Pattern.compile(regex), replacement);
     }
 
-    public RegexReplace(String regex, String replacement)
+    public RegexReplacer(String regex, String replacement)
     {
         this(Pattern.compile(regex), mr -> replacement);
     }

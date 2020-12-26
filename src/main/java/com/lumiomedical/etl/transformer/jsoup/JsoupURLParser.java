@@ -7,33 +7,32 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
+import java.net.URL;
 
 /**
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/12/22
  */
-public class JsoupStream implements Transformer<InputStream, Document>
+public class JsoupURLParser implements Transformer<URL, Document>
 {
-    private final Charset charset;
+    private final int timeout;
 
-    public JsoupStream(Charset charset)
+    public JsoupURLParser(int timeout)
     {
-        this.charset = charset;
+        this.timeout = timeout;
     }
 
-    public JsoupStream()
+    public JsoupURLParser()
     {
-        this(Charset.defaultCharset());
+        this(30000);
     }
 
     @Override
-    public Document transform(InputStream input) throws TransformationException
+    public Document transform(URL url) throws TransformationException
     {
         try {
-            Logging.logger.info("Initializing document from stream");
-            return Jsoup.parse(input, this.charset.displayName(), "");
+            Logging.logger.info("Initializing document from HTTP resource at " + url.toString());
+            return Jsoup.parse(url, this.timeout);
         }
         catch (IOException e) {
             throw new TransformationException(e.getMessage(), e);

@@ -32,7 +32,7 @@ Add the following in your `pom.xml`:
 <dependency>
     <groupId>com.lumiomedical</groupId>
     <artifactId>lumio-etl</artifactId>
-    <version>0.2</version>
+    <version>0.4</version>
 </dependency>
 ```
 
@@ -74,8 +74,8 @@ Here is what a pipeline for manipulating this could look like:
 
 ```java
 var flow = Flow
-    .from(new FileExtractor("path/to/my.csv")) //We open an inpustream from the CSV file
-    .pipe(new TablesawCSVTransformer()) //We interpret it as CSV and transform it into a tablesaw dataframe
+    .from(new FileStreamer("path/to/my.csv")) //We open an inpustream from the CSV file
+    .pipe(new TablesawCSVParser()) //We interpret it as CSV and transform it into a tablesaw dataframe
     .pipe(Tablesaw::print) // We print the dataframe to stdout
 ;
 
@@ -104,10 +104,10 @@ Let's also add a filter, and a persistence operation:
 var tableProperties = new TableProperties().setAddRowIndex(false);
 
 var flow = Flow
-    .from(new FileExtractor("path/to/my.csv"))
-    .pipe(new TablesawCSVTransformer(tableProperties))
+    .from(new FileStreamer("path/to/my.csv"))
+    .pipe(new TablesawCSVParser(tableProperties))
     .pipe(Criterion.whereIsEqualTo("metadata", "interesting")) //We use a helper query feature, note that there are many other ways to do that, notably using the tablesaw API
-    .sink(new TablesawCSVLoader("path/to/my-filtered.csv")) //We dump the dataframe as CSV into another file
+    .sink(new TablesawCSVWriter("path/to/my-filtered.csv")) //We dump the dataframe as CSV into another file
 ;
 
 Flow.runAsPipeline(flow);
@@ -127,10 +127,10 @@ Will wrap-up this very simple example by replacing the source by one loading the
 var tableProperties = new TableProperties().setAddRowIndex(false);
 
 var flow = Flow
-    .from(new AmazonS3Extractor(s3, "my-bucket", "my.csv")) // Given a properly configured AmazonS3 instance
-    .pipe(new TablesawCSVTransformer(tableProperties))
+    .from(new AmazonS3Streamer(s3, "my-bucket", "my.csv")) // Given a properly configured AmazonS3 instance
+    .pipe(new TablesawCSVParser(tableProperties))
     .pipe(Criterion.whereIsEqualTo("metadata", "interesting"))
-    .sink(new TablesawCSVLoader("path/to/my-filtered.csv")) // We still write the output to the filesystem
+    .sink(new TablesawCSVWriter("path/to/my-filtered.csv")) // We still write the output to the filesystem
 ;
 
 Flow.runAsPipeline(flow);

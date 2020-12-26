@@ -8,14 +8,14 @@ import tech.tablesaw.api.Table;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/11/19
  */
-public class TablesawFork implements Transformer<Table, Table>
+public class TablesawForker implements Transformer<Table, Table>
 {
     private final String name;
 
     /**
      *
      */
-    public TablesawFork()
+    public TablesawForker()
     {
         this(null);
     }
@@ -24,7 +24,7 @@ public class TablesawFork implements Transformer<Table, Table>
      *
      * @param name
      */
-    public TablesawFork(String name)
+    public TablesawForker(String name)
     {
         this.name = name;
     }

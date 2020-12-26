@@ -7,7 +7,7 @@ import com.lumiomedical.etl.generator.IterableGenerator;
 import com.lumiomedical.etl.loader.file.FileWriteJson;
 import com.lumiomedical.etl.transformer.Transformers;
 import com.lumiomedical.etl.transformer.filesystem.CreateDirectory;
-import com.lumiomedical.etl.transformer.http.BasicHttpQuery;
+import com.lumiomedical.etl.transformer.http.BasicHttpRequestStreamer;
 import com.lumiomedical.etl.transformer.json.JsonArrayToCollection;
 import com.lumiomedical.etl.transformer.json.ParseJsonArray;
 import com.lumiomedical.etl.transformer.json.ParseJsonObject;
@@ -117,7 +117,7 @@ public class SampleNLP extends ETL
             .pipe(title -> HttpRequest.newBuilder(
                 URI.create("https://"+this.locale.getLanguage()+".wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles="+title)
             ).build())
-            .pipe(nonFatal(new BasicHttpQuery()))
+            .pipe(nonFatal(new BasicHttpRequestStreamer()))
             .pipe(new ParseJsonObject())
             .pipe(Transformers.nonFatal(new WikipediaDocumentCreator()))
         ;

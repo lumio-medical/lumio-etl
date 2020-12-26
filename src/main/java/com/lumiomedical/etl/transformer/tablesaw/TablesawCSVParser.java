@@ -29,12 +29,12 @@ import java.util.stream.Collectors;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/02/27
  */
-public class TablesawCSVParse implements Transformer<InputStream, Table>
+public class TablesawCSVParser implements Transformer<InputStream, Table>
 {
     private final TableProperties properties;
     private final TableProcessor preprocessor;
 
-    public TablesawCSVParse()
+    public TablesawCSVParser()
     {
         this(new TableProperties());
     }
@@ -43,7 +43,7 @@ public class TablesawCSVParse implements Transformer<InputStream, Table>
      *
      * @param properties
      */
-    public TablesawCSVParse(TableProperties properties)
+    public TablesawCSVParser(TableProperties properties)
     {
         this.properties = properties;
         this.preprocessor = new CompositeProcessor()
@@ -56,7 +56,7 @@ public class TablesawCSVParse implements Transformer<InputStream, Table>
      * @param confPath
      * @throws TablePropertiesLoadingException
      */
-    public TablesawCSVParse(String confPath) throws TablePropertiesLoadingException
+    public TablesawCSVParser(String confPath) throws TablePropertiesLoadingException
     {
         this(new TablePropertiesFileLoader(new TablePropertiesJSONStreamLoader()).load(confPath));
     }

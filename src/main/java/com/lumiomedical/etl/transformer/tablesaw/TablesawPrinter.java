@@ -8,7 +8,7 @@ import tech.tablesaw.api.Table;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/04/10
  */
-public class TablesawPrint implements Transformer<Table, Table>
+public class TablesawPrinter implements Transformer<Table, Table>
 {
     private final PrintTableProcessor processor;
 
@@ -16,7 +16,7 @@ public class TablesawPrint implements Transformer<Table, Table>
      *
      * @param columnNames
      */
-    public TablesawPrint(String... columnNames)
+    public TablesawPrinter(String... columnNames)
     {
         this(20, columnNames);
     }
@@ -26,7 +26,7 @@ public class TablesawPrint implements Transformer<Table, Table>
      * @param max
      * @param columnNames
      */
-    public TablesawPrint(int max, String... columnNames)
+    public TablesawPrinter(int max, String... columnNames)
     {
         this.processor = new PrintTableProcessor(max, columnNames);
     }

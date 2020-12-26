@@ -14,7 +14,7 @@ import java.io.InputStream;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/11/24
  */
-public class TarGzip implements Transformer<InputStream, InputStream>
+public class UnTarGzip implements Transformer<InputStream, InputStream>
 {
     @Override
     public InputStream transform(InputStream input) throws TransformationException

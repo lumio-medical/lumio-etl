@@ -14,7 +14,7 @@ import java.net.http.HttpResponse;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/12/17
  */
-public class HttpQuery implements Transformer<HttpRequest, HttpResponse<InputStream>>
+public class HttpRequestStreamer implements Transformer<HttpRequest, HttpResponse<InputStream>>
 {
     private final HttpClient client;
 
@@ -22,7 +22,7 @@ public class HttpQuery implements Transformer<HttpRequest, HttpResponse<InputStr
      *
      * @param client
      */
-    public HttpQuery(HttpClient client)
+    public HttpRequestStreamer(HttpClient client)
     {
         this.client = client;
     }
@@ -30,7 +30,7 @@ public class HttpQuery implements Transformer<HttpRequest, HttpResponse<InputStr
     /**
      *
      */
-    public HttpQuery()
+    public HttpRequestStreamer()
     {
         this(HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS)
         .build());

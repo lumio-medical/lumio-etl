@@ -4,8 +4,8 @@ import com.lumiomedical.etl.dataframe.configuration.loader.TablePropertiesLoadin
 import com.lumiomedical.etl.dataframe.configuration.loader.iostream.TablePropertiesJSONStreamLoader;
 import com.lumiomedical.etl.dataframe.configuration.loader.resource.TablePropertiesResourceLoader;
 import com.lumiomedical.etl.extractor.filesystem.ResourceStreamer;
-import com.lumiomedical.etl.transformer.tablesaw.TablesawCSVParse;
-import com.lumiomedical.etl.transformer.tablesaw.TablesawPrint;
+import com.lumiomedical.etl.transformer.tablesaw.TablesawCSVParser;
+import com.lumiomedical.etl.transformer.tablesaw.TablesawPrinter;
 import com.lumiomedical.flow.Flow;
 import com.lumiomedical.flow.compiler.CompilationException;
 import com.lumiomedical.flow.compiler.RunException;
@@ -26,8 +26,8 @@ public class ConfigurationParsingTest
         Flow.runAsPipeline(
             Flow
                 .from(new ResourceStreamer("com/lumiomedical/etl/dataframe/test.csv"))
-                .into(new TablesawCSVParse(props))
-                .into(new TablesawPrint())
+                .into(new TablesawCSVParser(props))
+                .into(new TablesawPrinter())
         );
     }
 }
