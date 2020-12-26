@@ -9,7 +9,7 @@ import com.lumiomedical.etl.generator.IterableGenerator;
 import com.lumiomedical.etl.loader.file.FileWriteJson;
 import com.lumiomedical.etl.transformer.filesystem.CreateDirectory;
 import com.lumiomedical.etl.transformer.http.HttpTransformers;
-import com.lumiomedical.etl.transformer.jsoup.JsoupRequestTransformer;
+import com.lumiomedical.etl.transformer.jsoup.JsoupRequest;
 import com.lumiomedical.flow.Flow;
 import com.lumiomedical.flow.FlowOut;
 import com.lumiomedical.flow.compiler.FlowCompiler;
@@ -73,7 +73,7 @@ public class SampleCrawl extends ETL
             .pipe(new CreateDirectory<>(this.outputDir))
             /* We produce a Page entity and extract links in the document */
             .pipe(HttpTransformers::asURL)
-            .pipe(new JsoupRequestTransformer())
+            .pipe(new JsoupRequest())
             .pipe(SampleCrawl::createPage)
             .pipe(new PageLinkExtractor())
             .driftSink(new PageLoader(this.outputDir))
@@ -92,7 +92,7 @@ public class SampleCrawl extends ETL
             .stream(IterableGenerator::new).setMaxParallelism(this.parallelism)
             /* For each link, we query the page and stop the stream flow if it isn't successful */
             .pipe(nonFatal(HttpTransformers::asURL))
-            .pipe(nonFatal(new JsoupRequestTransformer()))
+            .pipe(nonFatal(new JsoupRequest()))
             .pipe(SampleCrawl::createPage)
             .driftSink(new PageLoader(this.outputDir))
         ;

@@ -5,7 +5,7 @@ import com.lumiomedical.etl.dataframe.processor.print.PrintSchemaProcessor;
 import com.lumiomedical.etl.dataframe.processor.print.PrintStructureProcessor;
 import com.lumiomedical.etl.dataframe.processor.print.PrintTableProcessor;
 import com.lumiomedical.etl.logging.Logging;
-import com.lumiomedical.etl.transformer.tablesaw.TablesawProcessorTransformer;
+import com.lumiomedical.etl.transformer.tablesaw.TablesawProcessor;
 import com.lumiomedical.flow.actor.transformer.Transformer;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
@@ -76,9 +76,9 @@ public final class Tablesaw
      * @param processors
      * @return
      */
-    public static TablesawProcessorTransformer processors(TableProcessor... processors)
+    public static TablesawProcessor processors(TableProcessor... processors)
     {
-        return new TablesawProcessorTransformer(processors);
+        return new TablesawProcessor(processors);
     }
 
     public static Table print(Table table)

@@ -2,15 +2,15 @@ package com.lumiomedical.nlp;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.lumiomedical.etl.ETL;
-import com.lumiomedical.etl.extractor.http.BasicHttpClientExtractor;
+import com.lumiomedical.etl.extractor.http.BasicHttpStreamer;
 import com.lumiomedical.etl.generator.IterableGenerator;
 import com.lumiomedical.etl.loader.file.FileWriteJson;
 import com.lumiomedical.etl.transformer.Transformers;
 import com.lumiomedical.etl.transformer.filesystem.CreateDirectory;
-import com.lumiomedical.etl.transformer.http.BasicHttpClientTransformer;
-import com.lumiomedical.etl.transformer.json.JsonArrayToCollectionTransformer;
-import com.lumiomedical.etl.transformer.json.ParseJsonArrayTransformer;
-import com.lumiomedical.etl.transformer.json.ParseJsonObjectTransformer;
+import com.lumiomedical.etl.transformer.http.BasicHttpQuery;
+import com.lumiomedical.etl.transformer.json.JsonArrayToCollection;
+import com.lumiomedical.etl.transformer.json.ParseJsonArray;
+import com.lumiomedical.etl.transformer.json.ParseJsonObject;
 import com.lumiomedical.flow.Flow;
 import com.lumiomedical.flow.FlowOut;
 import com.lumiomedical.flow.compiler.FlowCompiler;
@@ -83,11 +83,11 @@ public class SampleNLP extends ETL
     private static FlowOut<Set<String>> extractStopwords(String url)
     {
         return Flow
-            .from(new BasicHttpClientExtractor(
+            .from(new BasicHttpStreamer(
                 HttpRequest.newBuilder(URI.create(url)).build()
             ))
-            .pipe(new ParseJsonArrayTransformer())
-            .pipe(new JsonArrayToCollectionTransformer<>(JsonNode::asText, Collectors.toSet()))
+            .pipe(new ParseJsonArray())
+            .pipe(new JsonArrayToCollection<>(JsonNode::asText, Collectors.toSet()))
        ;
     }
 
@@ -117,8 +117,8 @@ public class SampleNLP extends ETL
             .pipe(title -> HttpRequest.newBuilder(
                 URI.create("https://"+this.locale.getLanguage()+".wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles="+title)
             ).build())
-            .pipe(nonFatal(new BasicHttpClientTransformer()))
-            .pipe(new ParseJsonObjectTransformer())
+            .pipe(nonFatal(new BasicHttpQuery()))
+            .pipe(new ParseJsonObject())
             .pipe(Transformers.nonFatal(new WikipediaDocumentCreator()))
         ;
     }
