@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.lumiomedical.etl.ETL;
 import com.lumiomedical.etl.extractor.http.BasicHttpClientExtractor;
 import com.lumiomedical.etl.generator.IterableGenerator;
-import com.lumiomedical.etl.loader.file.FileWriteString;
+import com.lumiomedical.etl.loader.file.FileWriteJson;
 import com.lumiomedical.etl.transformer.Transformers;
 import com.lumiomedical.etl.transformer.filesystem.CreateDirectory;
 import com.lumiomedical.etl.transformer.http.BasicHttpClientTransformer;
 import com.lumiomedical.etl.transformer.json.JsonArrayToCollectionTransformer;
-import com.lumiomedical.etl.transformer.json.JsonArrayTransformer;
-import com.lumiomedical.etl.transformer.json.JsonObjectTransformer;
+import com.lumiomedical.etl.transformer.json.ParseJsonArrayTransformer;
+import com.lumiomedical.etl.transformer.json.ParseJsonObjectTransformer;
 import com.lumiomedical.flow.Flow;
 import com.lumiomedical.flow.FlowOut;
 import com.lumiomedical.flow.compiler.FlowCompiler;
@@ -43,9 +43,9 @@ public class SampleNLP extends ETL
 
     /**
      *
-     * @param outputPath
-     * @param parallelism
-     * @param locale
+     * @param outputPath Directory path in which to output stats files
+     * @param parallelism Max parallelism factor to use for the document stream
+     * @param locale The reference locale to use for the Wikipedia API and NLP implementations
      */
     public SampleNLP(String outputPath, int parallelism, Locale locale)
     {
@@ -58,13 +58,13 @@ public class SampleNLP extends ETL
     protected Collection<Node> provideFlows()
     {
         /* For each article title, we produce Document entities */
-        StreamOut<String> titleFlow = streamTitles(outputPath, parallelism);
-        StreamOut<Document> documentFlow = createDocument(titleFlow, locale);
-        StreamOut<Document> processedFlow = processDocument(documentFlow, locale);
+        StreamOut<String> titleFlow = streamTitles();
+        StreamOut<Document> documentFlow = createDocument(titleFlow);
+        StreamOut<Document> processedFlow = processDocument(documentFlow);
 
         /* We compile all documents and produce various stats */
-        addStats(processedFlow, outputPath);
-        addSize(processedFlow, outputPath);
+        addStats(processedFlow);
+        addSize(processedFlow);
 
         return List.of(processedFlow);
     }
@@ -86,57 +86,50 @@ public class SampleNLP extends ETL
             .from(new BasicHttpClientExtractor(
                 HttpRequest.newBuilder(URI.create(url)).build()
             ))
-            .pipe(new JsonArrayTransformer())
+            .pipe(new ParseJsonArrayTransformer())
             .pipe(new JsonArrayToCollectionTransformer<>(JsonNode::asText, Collectors.toSet()))
        ;
     }
 
     /**
+     * At the end of this pipe segment, the input titles collection should be turned into a stream of titles that can be processed individually.
      *
-     * @param outputPath
-     * @param parallelism
-     * @return
+     * @return A stream of Wikipedia article titles
      */
-    private static StreamOut<String> streamTitles(String outputPath, int parallelism)
+    private StreamOut<String> streamTitles()
     {
         return Flow
             .<List<String>>from("titles")
-            .pipe(ts -> {
-                System.out.println("Compiling top 5 tokens for the following "+ts.size()+" wikipedia articles:");
-                for (String title : ts)
-                    System.out.println(" - "+title);
-                return ts;
-            })
-            .pipe(new CreateDirectory<>(outputPath))
-            .stream(IterableGenerator::new).setMaxParallelism(parallelism)
+            .pipe(new CreateDirectory<>(this.outputPath))
+            .stream(IterableGenerator::new).setMaxParallelism(this.parallelism)
         ;
     }
 
     /**
+     * At the end of this pipe segment, Documents should be populated with their Wikipedia title and wikipedia introduction paragraph.
      *
-     * @param titleFlow
-     * @param locale
-     * @return
+     * @param titleFlow A stream of titles from which to derive Documents
+     * @return A stream of Wikipedia Documents
      */
-    private static StreamOut<Document> createDocument(StreamOut<String> titleFlow, Locale locale)
+    private StreamOut<Document> createDocument(StreamOut<String> titleFlow)
     {
         return titleFlow
             .pipe(title -> HttpRequest.newBuilder(
-                URI.create("https://"+locale.getLanguage()+".wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles="+title)
+                URI.create("https://"+this.locale.getLanguage()+".wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles="+title)
             ).build())
             .pipe(nonFatal(new BasicHttpClientTransformer()))
-            .pipe(new JsonObjectTransformer())
+            .pipe(new ParseJsonObjectTransformer())
             .pipe(Transformers.nonFatal(new WikipediaDocumentCreator()))
         ;
     }
 
     /**
+     * At the end of this pipe segment, Documents should be processed and have various properties resulting from their processing (sentences, tokens).
      *
-     * @param documentFlow
-     * @param locale
-     * @return
+     * @param documentFlow A stream of Documents to process
+     * @return A stream of processed Wikipedia Documents
      */
-    private static StreamOut<Document> processDocument(StreamOut<Document> documentFlow, Locale locale)
+    private StreamOut<Document> processDocument(StreamOut<Document> documentFlow)
     {
         FlowOut<Set<String>> stopwordFlow = extractStopwords("https://raw.githubusercontent.com/6/stopwords-json/master/dist/"+locale.getLanguage()+".json");
 
@@ -144,7 +137,7 @@ public class SampleNLP extends ETL
             /* We run some regexes over the whole text in order to remove/clean-up some patterns */
             .pipe(new WikipediaTextCleaner())
             /* We produce sentences from the text */
-            .pipe(new WikipediaSentenceSplitter(locale))
+            .pipe(new WikipediaSentenceSplitter(this.locale))
             .pipe(new WikipediaSentenceTokenizer())
             .pipe(new WikipediaTokenMapping(String::toLowerCase))
             /* We filter out stopwords */
@@ -158,10 +151,9 @@ public class SampleNLP extends ETL
 
     /**
      *
-     * @param documentFlow
-     * @param outputPath
+     * @param documentFlow A stream of Documents from which to compute stats
      */
-    private static void addStats(StreamOut<Document> documentFlow, String outputPath)
+    private void addStats(StreamOut<Document> documentFlow)
     {
         documentFlow
             /* We produce a map of token frequencies for the document */
@@ -179,6 +171,7 @@ public class SampleNLP extends ETL
                 }
                 return new Pair<>(document, frequency);
             })
+            /* We accumulate all documents (and their token frequency map) and produce a JSON map with a top-5 of the most frequent tokens */
             .accumulate()
             .pipe(documents -> {
                 var json = Json.newObject();
@@ -199,18 +192,17 @@ public class SampleNLP extends ETL
 
                 return json;
             })
-            .pipe(Json::prettyPrint)
-            .sink(new FileWriteString(outputPath+"frequencies.json"))
+            .sink(new FileWriteJson<>(this.outputPath+"frequencies.json"))
         ;
     }
 
     /**
      *
-     * @param documentFlow
-     * @param outputPath
+     * @param documentFlow A stream of Documents from which to compute stats
      */
-    private static void addSize(StreamOut<Document> documentFlow, String outputPath)
+    private void addSize(StreamOut<Document> documentFlow)
     {
+        /* We accumulate all produced Documents and produce JSON map containing each document's size */
         documentFlow
             .accumulate()
             .pipe(docs -> {
@@ -223,8 +215,7 @@ public class SampleNLP extends ETL
 
                 return json;
             })
-            .pipe(Json::prettyPrint)
-            .sink(new FileWriteString(outputPath+"sizes.json"))
+            .sink(new FileWriteJson<>(this.outputPath+"sizes.json"))
         ;
     }
 }

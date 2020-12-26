@@ -13,7 +13,7 @@ import java.io.InputStream;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/04/13
  */
-public class JsonObjectTransformer implements Transformer<InputStream, ObjectNode>
+public class ParseJsonObjectTransformer implements Transformer<InputStream, ObjectNode>
 {
     @Override
     public ObjectNode transform(InputStream input) throws TransformationException

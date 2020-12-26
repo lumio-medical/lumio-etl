@@ -10,11 +10,11 @@ import java.nio.charset.Charset;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/08/21
  */
-public class StringInputStreamTransformer implements Transformer<String, InputStream>
+public class StringToInputStreamTransformer implements Transformer<String, InputStream>
 {
     private final Charset charset;
 
-    public StringInputStreamTransformer()
+    public StringToInputStreamTransformer()
     {
         this.charset = Charset.defaultCharset();
     }
@@ -23,7 +23,7 @@ public class StringInputStreamTransformer implements Transformer<String, InputSt
      *
      * @param charset
      */
-    public StringInputStreamTransformer(Charset charset)
+    public StringToInputStreamTransformer(Charset charset)
     {
         this.charset = charset;
     }

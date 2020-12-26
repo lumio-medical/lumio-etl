@@ -11,7 +11,7 @@ import java.nio.charset.Charset;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/04/13
  */
-public class InputStreamToJsonTransformer<J extends JsonNode> implements Transformer<J, InputStream>
+public class JsonToInputStreamTransformer<J extends JsonNode> implements Transformer<J, InputStream>
 {
     private final boolean prettify;
     private final Charset charset;
@@ -19,7 +19,7 @@ public class InputStreamToJsonTransformer<J extends JsonNode> implements Transfo
     /**
      *
      */
-    public InputStreamToJsonTransformer()
+    public JsonToInputStreamTransformer()
     {
         this(false, Charset.defaultCharset());
     }
@@ -29,7 +29,7 @@ public class InputStreamToJsonTransformer<J extends JsonNode> implements Transfo
      * @param prettify
      * @param charset
      */
-    public InputStreamToJsonTransformer(boolean prettify, Charset charset)
+    public JsonToInputStreamTransformer(boolean prettify, Charset charset)
     {
         this.prettify = prettify;
         this.charset = charset;

@@ -42,15 +42,15 @@ public class SampleCrawl extends ETL
     @Override
     protected Collection<Node> provideFlows()
     {
-        var statsFile = outputDir+"stats.json";
-
         /* We extract the root page, then we extract all its links */
-        var rootFlow  = extractRootPage(outputDir);
-        var crawlFlow = crawlPage(rootFlow, outputDir, this.parallelism);
+        var rootFlow  = extractRootPage();
+        var crawlFlow = crawlPage(rootFlow);
 
         /* From these flows, we produce some stats */
-        var statsFlow = createStats(rootFlow, statsFile);
-        updateStats(crawlFlow, statsFlow, statsFile);
+        FlowOut<ObjectNode> statsFlow;
+        statsFlow = createStats(rootFlow);
+        statsFlow = updateStats(crawlFlow, statsFlow);
+        statsFlow.sink(new FileWriteJson<>(outputDir+"stats.json"));
 
         return List.of(rootFlow);
     }
@@ -63,51 +63,48 @@ public class SampleCrawl extends ETL
 
     /**
      *
-     * @param outputDir
-     * @return
+     * @return The root page flow
      */
-    private static FlowOut<Page> extractRootPage(String outputDir)
+    private FlowOut<Page> extractRootPage()
     {
         FlowOut<String> urlFlow = Flow.from("url");
 
         return urlFlow
-            .pipe(new CreateDirectory<>(outputDir))
+            .pipe(new CreateDirectory<>(this.outputDir))
             /* We produce a Page entity and extract links in the document */
             .pipe(HttpTransformers::asURL)
             .pipe(new JsoupRequestTransformer())
             .pipe(SampleCrawl::createPage)
             .pipe(new PageLinkExtractor())
-            .driftSink(new PageLoader(outputDir))
+            .driftSink(new PageLoader(this.outputDir))
         ;
     }
 
     /**
      *
-     * @param rootFlow
-     * @param outputDir
-     * @param parallelism
-     * @return
+     * @param rootFlow The root page flow
+     * @return A stream of Pages found in the root page
      */
-    private static StreamOut<Page> crawlPage(FlowOut<Page> rootFlow, String outputDir, int parallelism)
+    private StreamOut<Page> crawlPage(FlowOut<Page> rootFlow)
     {
         return rootFlow
             .pipe(Page::getLinks)
-            .stream(IterableGenerator::new).setMaxParallelism(parallelism)
+            .stream(IterableGenerator::new).setMaxParallelism(this.parallelism)
             /* For each link, we query the page and stop the stream flow if it isn't successful */
             .pipe(nonFatal(HttpTransformers::asURL))
             .pipe(nonFatal(new JsoupRequestTransformer()))
             .pipe(SampleCrawl::createPage)
-            .driftSink(new PageLoader(outputDir))
+            .driftSink(new PageLoader(this.outputDir))
         ;
     }
 
     /**
+     * From the root flow, we produce an array of links found in the root page.
      *
-     * @param rootFlow
-     * @param statsFilePath
-     * @return
+     * @param rootFlow The root page flow
+     * @return The stats flow as a JSON object
      */
-    private static FlowOut<ObjectNode> createStats(FlowOut<Page> rootFlow, String statsFilePath)
+    private FlowOut<ObjectNode> createStats(FlowOut<Page> rootFlow)
     {
         /* We initialize a "stats" file with some metadata */
         return rootFlow
@@ -122,24 +119,22 @@ public class SampleCrawl extends ETL
 
                 return json;
             })
-            .driftSink(new FileWriteJson<>(statsFilePath))
         ;
     }
 
     /**
+     * From the child page stream, we make an accumulation for counting how many pages we could download (remember that failed downloads result in a flow interruption).
      *
-     * @param pageFlow
-     * @param statsFlow
-     * @param statsFilePath
-     * @return
+     * @param pageFlow The root page flow
+     * @param statsFlow The stats flow
+     * @return The stats flow as a JSON object
      */
-    private static Node updateStats(StreamOut<Page> pageFlow, FlowOut<ObjectNode> statsFlow, String statsFilePath)
+    private FlowOut<ObjectNode> updateStats(StreamOut<Page> pageFlow, FlowOut<ObjectNode> statsFlow)
     {
         return pageFlow
             /* We accumulate all processed links and update the "stats" file */
             .accumulate(Collection::size)
             .join(statsFlow, (pageCount, stats) -> stats.put("downloaded_pages", pageCount))
-            .into(new FileWriteJson<>(statsFilePath))
         ;
     }
 

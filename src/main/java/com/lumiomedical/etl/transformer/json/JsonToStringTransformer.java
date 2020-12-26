@@ -10,11 +10,11 @@ import com.noleme.json.JsonException;
  * @author Pierre Lecerf (plecerf@lumiomedical.com)
  * Created on 2020/08/21
  */
-public class JsonSerializerTransformer<T> implements Transformer<T, String>
+public class JsonToStringTransformer<T> implements Transformer<T, String>
 {
     private final boolean prettyPrint;
 
-    public JsonSerializerTransformer()
+    public JsonToStringTransformer()
     {
         this(false);
     }
@@ -23,7 +23,7 @@ public class JsonSerializerTransformer<T> implements Transformer<T, String>
      *
      * @param prettyPrint
      */
-    public JsonSerializerTransformer(boolean prettyPrint)
+    public JsonToStringTransformer(boolean prettyPrint)
     {
         this.prettyPrint = prettyPrint;
     }
