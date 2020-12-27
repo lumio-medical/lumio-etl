@@ -5,7 +5,6 @@ import com.lumiomedical.etl.ETL;
 import com.lumiomedical.etl.extractor.http.BasicHttpStreamer;
 import com.lumiomedical.etl.generator.IterableGenerator;
 import com.lumiomedical.etl.loader.file.FileWriteJson;
-import com.lumiomedical.etl.transformer.Transformers;
 import com.lumiomedical.etl.transformer.filesystem.CreateDirectory;
 import com.lumiomedical.etl.transformer.http.BasicHttpRequestStreamer;
 import com.lumiomedical.etl.transformer.json.JsonArrayToCollection;
@@ -19,7 +18,6 @@ import com.lumiomedical.flow.node.Node;
 import com.lumiomedical.flow.stream.StreamOut;
 import com.lumiomedical.nlp.data.Document;
 import com.lumiomedical.nlp.data.Sentence;
-import com.lumiomedical.nlp.data.Token;
 import com.lumiomedical.nlp.etl.*;
 import com.noleme.commons.container.Pair;
 import com.noleme.json.Json;
@@ -119,7 +117,7 @@ public class SampleNLP extends ETL
             ).build())
             .pipe(nonFatal(new BasicHttpRequestStreamer()))
             .pipe(new ParseJsonObject())
-            .pipe(Transformers.nonFatal(new WikipediaDocumentCreator()))
+            .pipe(nonFatal(new WikipediaDocumentCreator()))
         ;
     }
 
@@ -183,8 +181,7 @@ public class SampleNLP extends ETL
                     document.second.entrySet().stream()
                         .sorted((t1, t2) -> t2.getValue() - t1.getValue())
                         .limit(5)
-                        .map(e -> new Token(e.getKey(), e.getValue()))
-                        .forEach(token -> documentNode.put(token.value, token.frequency))
+                        .forEach(token -> documentNode.put(token.getKey(), token.getValue()))
                     ;
 
                     json.set(document.first.getTitle(), documentNode);
