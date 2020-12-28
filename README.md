@@ -59,7 +59,7 @@ None of them leverage `lumio-vault` configuration features, but their structure 
 
 We'll also write down a basic example of ETL pipeline leveraging some features found in this library, we won't touch on the `ETL` classes, these are covered in the sample project.
 
-Most of the syntax is actually from `lumio-flow`, it could be a good idea to start by having a look at it [there](lumio-medical/lumio-flow).
+Most of the syntax is actually from `lumio-flow`, it could be a good idea to start by having a look at it [there](/lumio-medical/lumio-flow).
 
 Let us start by imagining we have a tiny CSV dataset like this:
 
