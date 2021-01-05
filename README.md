@@ -55,7 +55,7 @@ _TODO_
 ## III. Usage
 
 Note that two sample "toy" programs are also provided: `sample-nlp` [here](./sample/nlp) and `sample-crawl` [there](./sample/crawl).
-None of them leverage `lumio-vault` configuration features, but their structure could be simplified and made more resilient to changes with a bit of `lumio-vault` sprinkled in.
+None of them leverage `lumio-vault` [configuration features](https://github.com/lumio-medical/lumio-vault), but their structure could be simplified and made more resilient to changes with a bit of `lumio-vault` sprinkled in.
 
 We'll also write down a basic example of ETL pipeline leveraging some features found in this library, we won't touch on the `ETL` classes, these are covered in the sample project.
 
