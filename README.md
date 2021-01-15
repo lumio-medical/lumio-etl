@@ -4,6 +4,7 @@
 [![Maven Central Repository](https://maven-badges.herokuapp.com/maven-central/com.lumiomedical/lumio-etl/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.lumiomedical/lumio-etl)
 [![javadoc](https://javadoc.io/badge2/com.lumiomedical/lumio-etl/javadoc.svg)](https://javadoc.io/doc/com.lumiomedical/lumio-etl)
 ![GitHub](https://img.shields.io/github/license/lumio-medical/lumio-etl)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Flumio-medical%2Flumio-etl.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Flumio-medical%2Flumio-etl?ref=badge_shield)
 
 This library provides utilities for building `lumio-flow` based ETLs.
 
@@ -150,3 +151,7 @@ This project will require you to have the following:
 * Java 11+
 * Git (versioning)
 * Maven (dependency resolving, publishing and packaging) 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Flumio-medical%2Flumio-etl.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Flumio-medical%2Flumio-etl?ref=badge_large)
