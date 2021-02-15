@@ -2,11 +2,10 @@ package com.lumiomedical.nlp;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.lumiomedical.etl.ETL;
-import com.lumiomedical.etl.extractor.http.BasicHttpStreamer;
 import com.lumiomedical.etl.generator.IterableGenerator;
 import com.lumiomedical.etl.loader.file.FileWriteJson;
 import com.lumiomedical.etl.transformer.filesystem.CreateDirectory;
-import com.lumiomedical.etl.transformer.http.BasicHttpRequestStreamer;
+import com.lumiomedical.etl.transformer.http.BasicHttpStreamer;
 import com.lumiomedical.etl.transformer.json.JsonArrayToCollection;
 import com.lumiomedical.etl.transformer.json.ParseJsonArray;
 import com.lumiomedical.etl.transformer.json.ParseJsonObject;
@@ -81,9 +80,7 @@ public class SampleNLP extends ETL
     private static FlowOut<Set<String>> extractStopwords(String url)
     {
         return Flow
-            .from(new BasicHttpStreamer(
-                HttpRequest.newBuilder(URI.create(url)).build()
-            ))
+            .from(new BasicHttpStreamer().asExtractor(HttpRequest.newBuilder(URI.create(url)).build()))
             .pipe(new ParseJsonArray())
             .pipe(new JsonArrayToCollection<>(JsonNode::asText, Collectors.toSet()))
        ;
@@ -115,7 +112,7 @@ public class SampleNLP extends ETL
             .pipe(title -> HttpRequest.newBuilder(
                 URI.create("https://"+this.locale.getLanguage()+".wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles="+title)
             ).build())
-            .pipe(nonFatal(new BasicHttpRequestStreamer()))
+            .pipe(nonFatal(new BasicHttpStreamer()))
             .pipe(new ParseJsonObject())
             .pipe(nonFatal(new WikipediaDocumentCreator()))
         ;

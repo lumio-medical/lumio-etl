@@ -15,13 +15,11 @@ import java.util.function.Function;
  */
 public class CreateDirectory <I> implements Transformer<I, I>
 {
-    private final Path path;
     private final Function<I, Path> pathCreator;
 
     public CreateDirectory(Path path)
     {
-        this.path = path;
-        this.pathCreator = null;
+        this.pathCreator = any -> path;
     }
 
     public CreateDirectory(String path)
@@ -31,7 +29,6 @@ public class CreateDirectory <I> implements Transformer<I, I>
 
     public CreateDirectory(Function<I, Path> pathCreator)
     {
-        this.path = null;
         this.pathCreator = pathCreator;
     }
 
@@ -39,10 +36,7 @@ public class CreateDirectory <I> implements Transformer<I, I>
     public I transform(I input) throws TransformationException
     {
         try {
-            Path path = this.path != null
-                ? this.path
-                : this.pathCreator.apply(input)
-            ;
+            Path path = this.pathCreator.apply(input);
 
             if (!Files.exists(path))
             {
