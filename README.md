@@ -32,7 +32,7 @@ Add the following in your `pom.xml`:
 <dependency>
     <groupId>com.lumiomedical</groupId>
     <artifactId>lumio-etl</artifactId>
-    <version>0.4</version>
+    <version>0.5</version>
 </dependency>
 ```
 
@@ -74,7 +74,7 @@ Here is what a pipeline for manipulating this could look like:
 
 ```java
 var flow = Flow
-    .from(new FileStreamer("path/to/my.csv")) //We open an inpustream from the CSV file
+    .from(new FileStreamer(), "path/to/my.csv") //We open an inpustream from the CSV file
     .pipe(new TablesawCSVParser()) //We interpret it as CSV and transform it into a tablesaw dataframe
     .pipe(Tablesaw::print) // We print the dataframe to stdout
 ;
@@ -104,7 +104,7 @@ Let's also add a filter, and a persistence operation:
 var tableProperties = new TableProperties().setAddRowIndex(false);
 
 var flow = Flow
-    .from(new FileStreamer("path/to/my.csv"))
+    .from(new FileStreamer(), "path/to/my.csv")
     .pipe(new TablesawCSVParser(tableProperties))
     .pipe(Criterion.whereIsEqualTo("metadata", "interesting")) //We use a helper query feature, note that there are many other ways to do that, notably using the tablesaw API
     .sink(new TablesawCSVWriter("path/to/my-filtered.csv")) //We dump the dataframe as CSV into another file
