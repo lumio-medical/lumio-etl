@@ -32,7 +32,7 @@ Add the following in your `pom.xml`:
 <dependency>
     <groupId>com.lumiomedical</groupId>
     <artifactId>lumio-etl</artifactId>
-    <version>0.4</version>
+    <version>0.5</version>
 </dependency>
 ```
 
