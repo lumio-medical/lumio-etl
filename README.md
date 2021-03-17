@@ -108,7 +108,7 @@ var flow = Flow
     .from(new FileStreamer(), "path/to/my.csv")
     .pipe(new TablesawCSVParser(tableProperties))
     .pipe(Criterion.whereIsEqualTo("metadata", "interesting")) //We use a helper query feature, note that there are many other ways to do that, notably using the tablesaw API
-    .sink(new TablesawCSVWriter("path/to/my-filtered.csv")) //We dump the dataframe as CSV into another file
+    .sink(new TablesawCSVWrite("path/to/my-filtered.csv")) //We dump the dataframe as CSV into another file
 ;
 
 Flow.runAsPipeline(flow);
@@ -131,7 +131,7 @@ var flow = Flow
     .from(new AmazonS3Streamer(s3, "my-bucket", "my.csv")) // Given a properly configured AmazonS3 instance
     .pipe(new TablesawCSVParser(tableProperties))
     .pipe(Criterion.whereIsEqualTo("metadata", "interesting"))
-    .sink(new TablesawCSVWriter("path/to/my-filtered.csv")) // We still write the output to the filesystem
+    .sink(new TablesawCSVWrite("path/to/my-filtered.csv")) // We still write the output to the filesystem
 ;
 
 Flow.runAsPipeline(flow);
