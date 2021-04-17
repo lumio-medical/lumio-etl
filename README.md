@@ -6,6 +6,8 @@
 ![GitHub](https://img.shields.io/github/license/lumio-medical/lumio-etl)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Flumio-medical%2Flumio-etl.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Flumio-medical%2Flumio-etl?ref=badge_shield)
 
+This project is now archived, further developments should happen over at [noleme-flow-connectors](https://github.com/noleme/noleme-flow-connectors).
+
 This library provides utilities for building `lumio-flow` based ETLs.
 
 It is important to note that this library was very much a work in progress in both spirit and body.
